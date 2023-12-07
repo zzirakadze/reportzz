@@ -75,8 +75,10 @@ class EconomicCalendarPage(BasePage):
             return calendar_date_element[0].get_attribute("aria-label")
         else:
             try:
-                return f"('{calendar_date_element[0].get_attribute('aria-label')}'," \
-                       f" '{calendar_date_element[1].get_attribute('aria-label')}')"
+                return (
+                    f"('{calendar_date_element[0].get_attribute('aria-label')}',"
+                    f" '{calendar_date_element[1].get_attribute('aria-label')}')"
+                )
             except Exception as e:
                 self.logger.error(
                     f"Unexpected range of elements returned: {calendar_date_element}"

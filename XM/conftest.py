@@ -1,25 +1,23 @@
 import logging
 import os
-
 import pytest
 from dotenv import load_dotenv
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
-from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.firefox.service import Service as FirefoxService
 
 
 def setup_chrome(headless: bool) -> webdriver.Chrome:
-    chrome_options = Options()
+    chrome_options = ChromeOptions()
     chrome_options.add_argument("--start-maximized")
-    chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
     if headless:
         chrome_options.add_argument("--headless")
     driver = webdriver.Chrome(
-        service=Service(ChromeDriverManager().install()), options=chrome_options
+        service=ChromeService(ChromeDriverManager().install()), options=chrome_options
     )
     driver.maximize_window()
     logging.info("Chrome browser setup complete.")
@@ -46,24 +44,12 @@ def driver_instance(request):
     browser = request.config.getoption("--browser")
     url = request.config.getoption("--url")
     headless = request.config.getoption("--headless").lower() == "true"
-
     if browser not in DRIVER_SETUP_FUNCTIONS:
         raise ValueError(f"Unsupported browser: {browser}")
-
-    driver_setup_function = DRIVER_SETUP_FUNCTIONS[browser]
-    driver = driver_setup_function(headless)
-
-    logging.info(
-        f"Browser: {browser} execution started on {url} with headless mode: {headless} at {os.getcwd()}, time: {os.times()}"
-    )
+    driver = DRIVER_SETUP_FUNCTIONS[browser](headless)
     driver.get(url)
-
     yield driver
-
     driver.quit()
-    logging.info(
-        f"Browser: {browser} execution finished on {url} with headless mode: {headless} at {os.getcwd()}, time: {os.times()}"
-    )
 
 
 def pytest_addoption(parser) -> None:
@@ -77,7 +63,7 @@ def pytest_addoption(parser) -> None:
     parser.addoption(
         "--url",
         action="store",
-        default=f"{os.getenv('BASE_URL')}",
+        default=os.getenv("BASE_URL"),
         help="Choose the url to run the tests on",
     )
     parser.addoption(
@@ -85,4 +71,10 @@ def pytest_addoption(parser) -> None:
         action="store",
         default="false",
         help="Choose the headless mode to run the tests on",
+    )
+    parser.addoption(
+        "--reruns",
+        action="store",
+        default=0,
+        help="Choose the number of times to rerun failed tests",
     )
