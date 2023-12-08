@@ -1,7 +1,7 @@
 import json
 import logging
 from datetime import datetime
-
+from data_collection.aggregate_reports import aggregate_reports
 import pytest
 
 test_results: list = []
@@ -47,3 +47,4 @@ def pytest_sessionfinish(session, exitstatus) -> None:
         logging.info(f"Test results written to {report_file}.")
     except Exception as e:
         logging.error(f"Error writing to file: {e}")
+    aggregate_reports()
