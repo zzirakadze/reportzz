@@ -23,6 +23,3 @@ def aggregate_reports():
     else:
         logger.warning("No results found to aggregate.")
 
-
-if __name__ == "__main__":
-    aggregate_reports()
