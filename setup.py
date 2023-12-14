@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="reportzz_ai",
-    version="0.1.8",
+    version="0.1.12",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     license="MIT",
@@ -10,6 +10,7 @@ setup(
     long_description=open("README.md").read(),
     install_requires=[
         "pytest",
+        "Jinja2"
     ],
     url="https://github.com/zzirakadze/reportzz",
     author="Zura Zirakadze",

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportzz AI - Custom Test Report</title>
+    <style>
+        .table-wrapper {
+      font-family: 'Arial', sans-serif;
+      background-color: #F4F4F4;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 20px auto;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      border-radius: 10px;
+    }
+    th, td {
+      border: 1px solid #E1E1E1;
+      padding: 12px;
+      text-align: left;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    td:first-child,
+    td:last-child {
+      max-width: 400px;
+      width: 400px;
+    }
+    th {
+      background-color: #2C3E50;
+      color: #ECF0F1;
+    }
+    tr:nth-child(even) {
+      background-color: #F2F2F2;
+    }
+    tr:hover {
+      background-color: #E0E0E0;
+    }
+    .scrolling-container {
+      max-width: 400px; /* Set a fixed or max-width if needed */
+      overflow-y: auto;
+      margin-bottom: -18px;
+    }
+    .scrolling-container::-webkit-scrollbar {
+      width: 0;
+      background-color: transparent;
+    }
+    /* Hide scrollbar for Firefox and other browsers */
+    .scrolling-container {
+      scrollbar-width: thin;
+    }
+    .scrolling-container::-webkit-scrollbar-thumb {
+      display: none; /* Hide WebKit scrollbar thumb */
+    }
+    .passed {
+    color: green;
+  }
+
+  .failed {
+    color: red;
+  }
+  .reason-text {
+  color: red;
+}
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Reportzz AI</h1>
+    </div>
+    <div class="navbar">
+        <a href="#dashboard">Dashboard</a>
+        <a href="#test-suites">Test Suites</a>
+        <a href="#graphs">Graphs</a>
+        <!-- Other navigation links if needed -->
+    </div>
+    <div class="main">
+        <!-- Dashboard content will be dynamically inserted here -->
+        <div class="card" id="test-results">
+            <h2>Test Results</h2>
+            <div class="table-wrapper">
+            <table>
+                <thead>
+                  <tr>
+                    <th>Test Name</th>
+                    <th>Status</th>
+                    <th>Reason</th>
+                    <th>Duration in ms.</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for test in tests %}
+                  <tr>
+                    <td>
+                      <div class="scrolling-container">
+                        {{ test.name }}
+                      </div>
+                    </td>
+                    <td>
+                      {% if test.outcome == 'passed' %}
+                        <span class="passed">&#10004;</span>
+                      {% else %}
+                        <span class="failed">&#10060;</span>
+                      {% endif %}
+                    </td>
+                    <td>
+                      <div class="scrolling-container {{ 'reason-text' if test.longrepr }}">
+                        {{ test.longrepr if test.longrepr }}
+                      </div>
+                    </td>
+                    <td>{{ test.duration | round(2) }}</td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+          </table>
+                </div>
+        </div>
+        <!-- Other sections for Graphs, Test Suites etc. -->
+    </div>
+    <div class="footer">
+        <p>&copy; 2023 Reportzz AI</p>
+    </div>
+</body>
+</html>
