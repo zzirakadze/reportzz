@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="reportzz_ai",
-    version="0.1.12",
+    version="0.1.15",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     license="MIT",

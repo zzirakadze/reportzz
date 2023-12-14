@@ -32,22 +32,7 @@ def pytest_runtest_makereport(item, call) -> None:
             "duration": call.stop - call.start
             if hasattr(call, "stop") and hasattr(call, "start")
             else None,
-            "longrepr": str(call.excinfo) if call.excinfo else None,
-            "traceback": call.excinfo.traceback.format() if call.excinfo else None,
-            "stdout": call.stdout.str() if call.stdout else None,
-            "stderr": call.stderr.str() if call.stderr else None,
-            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            "test_file": item.location[0],
-            "test_class": item.location[0].split("/")[-1],
-            "test_function": item.location[2],
-            "test_module": item.location[0].split("/")[-1].split(".")[0],
-            "suite_name": item.location[0].split("/")[-1].split(".")[0],
-            "test_id": item.location[2],
-            "test_description": item.location[2],
-            "test_status": "passed" if call.excinfo is None else "failed",
-            "test_duration": call.stop - call.start,
-            "test_start_time": call.start,
-            "test_end_time": call.stop,
+            "longrepr": str(call.excinfo) if call.excinfo else None
         }
         test_results.append(test_result)
         logging.info(f"Test result appended: {test_result}")

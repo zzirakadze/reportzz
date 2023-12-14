@@ -13,7 +13,11 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      height: 90vh;
+      height: auto;
+      min-height: 70vh;
+      margin-bottom: 0;
+      padding-bottom: 0;
     }
     table {
       border-collapse: collapse;
@@ -22,6 +26,7 @@
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
       overflow: hidden;
       border-radius: 10px;
+      margin-bottom: 0
     }
     th, td {
       border: 1px solid #E1E1E1;
@@ -46,7 +51,7 @@
       background-color: #E0E0E0;
     }
     .scrolling-container {
-      max-width: 400px; /* Set a fixed or max-width if needed */
+      max-width: 400px;
       overflow-y: auto;
       margin-bottom: -18px;
     }
@@ -54,12 +59,11 @@
       width: 0;
       background-color: transparent;
     }
-    /* Hide scrollbar for Firefox and other browsers */
     .scrolling-container {
       scrollbar-width: thin;
     }
     .scrolling-container::-webkit-scrollbar-thumb {
-      display: none; /* Hide WebKit scrollbar thumb */
+      display: none;
     }
     .passed {
     color: green;
@@ -69,7 +73,80 @@
     color: red;
   }
   .reason-text {
-  color: red;
+      color: red;
+    }
+    .pagination {
+        text-align: center;
+        margin-top: 20px;
+        position: relative; /* New added line */
+        bottom: 60px;
+        }
+
+    .pagination a {
+        margin: 0 5px;
+        cursor: pointer;
+    }
+
+    .pagination a.active {
+        font-weight: bold;
+    }
+    .header {
+    background-color: #2C3E50;
+    color: #ECF0F1;
+    padding: 10px 0;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+
+  .header h1 {
+    margin: 0;
+    font-size: 2.5em;
+  }
+
+  .navbar {
+    background-color: #34495E;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .navbar a {
+    padding: 14px 20px;
+    display: block;
+    color: #ECF0F1;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition for hover effects */
+  }
+
+  .navbar a:hover {
+    background-color: #4E5D6C;
+    color: #F1C40F; /* Highlight color when hovering over links */
+  }
+
+  /* Additional styles for the main content area */
+  .main {
+    max-width: 1200px; /* Set a max-width for the main content area */
+    margin: 20px auto;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    background-color: #FFF;
+    padding-bottom: 60px;
+  }
+
+  .footer {
+    background-color: #2C3E50;
+    color: #ECF0F1;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 50px;
+  }
+  body {
+    padding-bottom: 60px;
 }
 
     </style>
@@ -79,54 +156,142 @@
         <h1>Reportzz AI</h1>
     </div>
     <div class="navbar">
-        <a href="#dashboard">Dashboard</a>
-        <a href="#test-suites">Test Suites</a>
-        <a href="#graphs">Graphs</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/test-suites">Test Suites</a>
+        <a href="/graphs">Graphs</a>
         <!-- Other navigation links if needed -->
     </div>
     <div class="main">
-        <!-- Dashboard content will be dynamically inserted here -->
-        <div class="card" id="test-results">
-            <h2>Test Results</h2>
-            <div class="table-wrapper">
-            <table>
-                <thead>
-                  <tr>
-                    <th>Test Name</th>
-                    <th>Status</th>
-                    <th>Reason</th>
-                    <th>Duration in ms.</th>
-                  </tr>
-                </thead>
-                <tbody>
-                {% for test in tests %}
-                  <tr>
-                    <td>
-                      <div class="scrolling-container">
-                        {{ test.name }}
-                      </div>
-                    </td>
-                    <td>
-                      {% if test.outcome == 'passed' %}
-                        <span class="passed">&#10004;</span>
-                      {% else %}
-                        <span class="failed">&#10060;</span>
-                      {% endif %}
-                    </td>
-                    <td>
-                      <div class="scrolling-container {{ 'reason-text' if test.longrepr }}">
-                        {{ test.longrepr if test.longrepr }}
-                      </div>
-                    </td>
-                    <td>{{ test.duration | round(2) }}</td>
-                  </tr>
-                {% endfor %}
-                </tbody>
-          </table>
+        {% if section == 'dashboard' %}
+            <p>
+                "test"
+            </p>
+        {% elif section == 'graphs' %}
+            <p>
+                "test"
+            </p>
+        {% else %}
+            <!-- Test Suites content -->
+            <div class="card" id="test-results">
+                <h2>Test Results</h2>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Test Name</th>
+                                <th>Status</th>
+                                <th>Reason</th>
+                                <th>Duration in ms.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Test rows will be populated here -->
+                            {% for test in tests %}
+                                <tr>
+                                    <td>
+                                        <div class="scrolling-container">
+                                            {{ test.name }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {% if test.outcome == 'passed' %}
+                                            <span class="passed">&#10004;</span>
+                                        {% else %}
+                                            <span class="failed">&#10060;</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="scrolling-container {{ 'reason-text' if test.longrepr }}">
+                                            {{ test.longrepr | escape }}
+                                        </div>
+                                    </td>
+                                    <td>{{ test.duration | round(2) }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
-        </div>
-        <!-- Other sections for Graphs, Test Suites etc. -->
+            </div>
+        {% endif %}
     </div>
+    <div class="pagination" id="pagination"></div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var currentPage = 1;
+            var rowsPerPage = 10;
+            var table = document.querySelector('table tbody');
+            var rows = table.querySelectorAll('tr');
+            var rowCount = rows.length;
+            var pageCount = Math.ceil(rowCount / rowsPerPage);
+            var paginationWrapper = document.getElementById('pagination');
+
+            function displayPage(page) {
+                var start = (page - 1) * rowsPerPage;
+                var end = start + rowsPerPage;
+                rows.forEach(function (row, index) {
+                    row.style.display = (start <= index && index < end) ? '' : 'none';
+                });
+                // Update active page link styling
+                var paginationLinks = paginationWrapper.querySelectorAll('a');
+                paginationLinks.forEach(function (link) {
+                    link.classList.remove('active');
+                    if (link.textContent == page.toString()) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            function appendPageLink(page) {
+                var pageLink = document.createElement('a');
+                pageLink.textContent = page;
+                pageLink.href = '#';
+                pageLink.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    currentPage = page;
+                    displayPage(page);
+                });
+                if (page === currentPage) {
+                    pageLink.classList.add('active');
+                }
+                paginationWrapper.appendChild(pageLink);
+            }
+
+            function setupPagination() {
+                // Append the Previous Arrow (<)
+                var prevArrow = document.createElement('a');
+                prevArrow.textContent = '<';
+                prevArrow.href = '#';
+                prevArrow.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if (currentPage > 1) {
+                        currentPage--;
+                        displayPage(currentPage);
+                    }
+                });
+                paginationWrapper.appendChild(prevArrow);
+                for (let i = 1; i <= pageCount; i++) {
+                    appendPageLink(i);
+                }
+                var nextArrow = document.createElement('a');
+                nextArrow.textContent = '>';
+                nextArrow.href = '#';
+                nextArrow.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if (currentPage < pageCount) {
+                        currentPage++;
+                        displayPage(currentPage);
+                    }
+                });
+                paginationWrapper.appendChild(nextArrow);
+            }
+
+            if (rowCount > rowsPerPage) {
+                setupPagination();
+                displayPage(currentPage);
+            }
+        });
+    </script>
+
     <div class="footer">
         <p>&copy; 2023 Reportzz AI</p>
     </div>
